@@ -60,11 +60,24 @@
     <!-- ADD YOUR THE STEPS OF YOUR DOCUMENTATION BELOW -->
     <!-- TO ADD IMAGES YOU WILL FIND IMG TAGS BETWEEN PARAGRAPHS -->
     <!-- ADD THE NAME OF YOUR FILE -->
+				<p>UART : STM32 ----> bluetooth 
+				<h1>UART registers</h1>
+				<h1>1- baud rate register</h1>
+				<p> baud rate = Fck/16*UARTdiv<br>Fck is a clock that depends on the APB of the UART. I am going to use APB1 which has UART4 and UART5 with clock
+				frequency of 36 MHZ. Baud rate will be fixed at 9600. Then it is easy to calculate the remaining variable</p>
+				<h1>2- status register</h1>
+				<p>We need only three bits in this register <br>
+				1) TXE: it indicates data is shifted from buffer and you can write more data.<br>
+				2) TC: it indicates data is transmitted.<br>3)TC: indicates that data is transmitted.</p>
+				<h1>3- control register 1</h1>
+				<p>This register is concerened with the enabling and features of the UART as well as the interupts flags bits. The UART will be set at 8-bit with
+				no parity bit.</p>
+				<h1> 4- control register 2</h1>
+				<p>This register is mostly concerned with the USART so only one bit will be used, the stop bit.</p>
                 <h1>Block Diagram:</h1>
                 <p>to be updated</p>
                 
-                <img src="images/dhdh.png">
-                <img src="images/dhdh.png">
+                <img src="images/comm_Bd.png">
                                
                 <h1>Circuit Design:</h1>
 				<p>to be updated</p>
