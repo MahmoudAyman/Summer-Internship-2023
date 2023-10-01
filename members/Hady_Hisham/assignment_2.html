@@ -60,11 +60,42 @@
     <!-- ADD YOUR THE STEPS OF YOUR DOCUMENTATION BELOW -->
     <!-- TO ADD IMAGES YOU WILL FIND IMG TAGS BETWEEN PARAGRAPHS -->
     <!-- ADD THE NAME OF YOUR FILE -->
+				<h1>stm32F303RE Configuration Steps:</h1>
+				<h2>Configuration of RCC (Clock Control Register):</h2>
+				<p><br>To start programming on the stm32F303RE microcontroller and with any ST microcontroller, everything needed must be enabled first through the RCC reg. <br>
+					this can be done by derefrencing the RCC using (->) and choosing the needed peripherals or buses and this can be achieved by using the archeticture of the controller.<br>
+					for example, if we want to enable Port A of the general purpose input and outputs(GPIOs), the chosen bus is AHBENR (AHB Peripheral clock enable register) and the code can be written like this:<br>
+					<br>RCC->AHBENR |= (1&lt &lt (the bit needed)) </p>
+	            <h2>Configuration of GPIOs:</h2>
+				<p><br>First, configuration of the pin modes. this includes four modes and can be choosen throught the bit value in the port mode register (GPIOx_MODER). Each pin on the port has 2 bits in the GPIOx_MODER.<br>
+					these four modes are:<br><br> 
+					- Input mode  (reset state) at bit value 00<br>
+					- General purpose output mode at bit value 01<br>
+					- Alternate function mode at bit value 10<br>
+					- Analog at bit value 11<br><br>
+					</p>
+					<img src="images/GPIO_MODER.PNG">
+					<p>After this according to your preference if the pin is configured as an output pin , we will use the port output type register(GPIOx_OTYPER). This register will determine whether the pin
+					uses: <br><br>
+					- Output Push/Pull at bit value 0<br>
+					- Output open-drain at bit value 1<br><br>
+					</p>
+					<img src="images/GPIO_OTYPER.PNG">
+					<p>Then we have to specify the speed of this output pin. To do that we will use the GPIO output speed register(GPIOx_OSPEEDR). It can be configured by:<br><br>
+					- Low speed at bit value x0 where x is 0 or 1 doesn't matter.<br>
+					- Medium speed at bit value 01<br>
+					- High speed at bit value 11<br><br>
+					</p>
+					<img src="images/GPIO_OSPEEDR.PNG">
+					<p>At the end we will specify if the pin is pull up or down assuming it's configured to do so from the port output type register:<br><br>
+					- No pull up,pull down at bit value 00<br>
+					- pull up at bit value 01<br>
+					- pull down at bit value 10</p>
+					<img src="images/GPIO_PUPDR.PNG">
+	
                 <h1>Block Diagram:</h1>
-                <p>to be updated</p>
                 
-                <img src="images/dhdh.png">
-                <img src="images/dhdh.png">
+                <img src="images/communication.PNG">
                                
                 <h1>Circuit Design:</h1>
 				<p>to be updated</p>
