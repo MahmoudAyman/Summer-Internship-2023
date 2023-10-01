@@ -67,12 +67,14 @@
 				<h3>2- GPIO port output type register</h3>
 				<h3>3- GPIO port output speed register</h3>
 				<h2>ii. UART Registers</h2>
-				<h3>1- baud rate register</h3>
+				<h3>1- Transmitted data register</h3>
+				<h3>2- Recieved data register</h3>
+				<h3>3- Baud rate register</h3>
 				
 				<p> baud rate = Fck/16*UARTdiv<br>Fck is a clock that depends on the APB of the UART. I am going to use APB1 which has UART4 and UART5 with clock
 				frequency of 36 MHZ. Baud rate will be fixed at 9600. Then it is easy to calculate the remaining variable</p>
 				
-				<h3>2- status register</h3>
+				<h3>2- Interrupt and status register</h3>
 				
 				<p>We need only three bits in this register <br>
 				1) TXE: it indicates data is shifted from buffer and you can write more data.<br>
@@ -94,8 +96,11 @@
 				ground through the switch and if you make the Output pin LOW the pin will be left floating since the switch will be turned off.<br> 
 				2- Push-Pull Type: If you make the output HIGH the pin will be connected to Vdd through the PNP switch and if you make 
 				the Output pin LOW the pin will be connected to Ground thorough the NPN switch.  </p>
-				<h2>3- Oversampling</h2> <p>The thumb rule is: If you are using your USART application in a very noisy environment,
-				then use oversampling by 16. If your environment is noise-free, then you can use oversampling by 8.</p>
+				<h2>3- Oversampling</h2> <p>Oversampling is a technique, which is used by the receive engine of the USART peripheral. It is used for 
+				data recovery by discriminating between the valid incoming data and noise. The oversampling method can be selected by programming the
+				OVER8 bit in the USART_CR1 register and can be either 16 or 8 times the baud rate clock. the choice between 16 or 8 is a trade-off between speed and clock
+				tolerance.
+				.</p>
                 
 
                 <h1>PCB Layout:</h1>
