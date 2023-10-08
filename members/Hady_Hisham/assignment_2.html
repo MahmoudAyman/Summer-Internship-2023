@@ -92,7 +92,26 @@
 					- pull up at bit value 01<br>
 					- pull down at bit value 10</p>
 					<img src="images/GPIO_PUPDR.PNG">
-	
+					<h2>UART Initialization:</h2>
+					<p>UART initialization starts with knowing which UART peripheral in the stm32 chip is going to be used.<br>
+					First, the ABPENR1 or ABPENR2 as deictated by the selected UART but each bus has runs on a different clock frequency where ABPENR1 runs on 72MHz and ABPENR2 runs on 32MHz.<br><br>
+					then, it's time to enable the UART in the ABPENR register. In this project USART2 is used which is found on ABPENR2 bus and so it's bit in the ABPENR2 is set to high with the same method used to enable the GPIO ports.<br><br>
+					After that, we enable the GPIO port that contains the Tx and Rx pins of the UART. These pins are PA2 and PA3 respectively.<br><br>
+					lastly, PA2 and PA3 are configured as alternate function pins by putting the value 1,0 in the corresponding pins in the MODER register, then 0 in the OTYPER register and as high speed in the OSPEEDR register.<br><br>
+					Now, the alternate function of the pins should be selected. This is done by configuring the AFR (Alternate Function Register).
+					this register is divided into two register AFRL (low) and AFRH(high).
+					each pin is has 16 alternate function that is multiplexed into 4 bits. 
+					Since we are using PA2 and PA3, we will configure them in the AFRL register. To select them as Tx and Rx, the AFRL is set to AF7 value which is 0111 in binary in bits 8,9,10,11 and 12,13,14,15.<br><br></p>
+					<img src="images/AFRL.PNG">
+					<h2>Baudrate Selection:</h2>
+					<p>The UART protocol is asynchronous and doesn't use a clock to receive and send the data so it relays on the baudrate. to select the baudrate we first need to know about the oversampling concept.<br>
+					<br><br>The receiver must sample the incoming data stream at a rate that is higher than the bit rate to determine when each bit starts and ends 1. Oversampling is used to increase the sampling rate and improve the accuracy of the sampling process.Usually, the oversampling is set to be 16 using the OVER8 and setting it to 0 in the UART Control Register 1(USART_CR1).<br>
+					to select the baudrate we desire ,9600 in this project, we divide the Fck value of the ABPENR selected bus which is the ABPENR2 on the baudrate desired (9600) and then putting the result as a value of hexadecimal in the USART_BRR register(Baud Rate Register).In this project the value is 0xEA6.<br><br></p>
+					<img src="images/Baudrate_generation.PNG">
+					<img src="images/BRR.PNG">
+					<p>Now, we can enable the pins to send or receive data by setting the bits UE(UART Enable), TE (Transmit Enable),RE(Receive Enable)in the USART_CR1 and then, we can start using the UART just without interrupts yet.<br><br></p>
+					<img src="images/UART_CR1.PNG">
+					<p>Notice: The BRR value should be set before setting the UART Enable bit (UE) in the USART_CR1.</p>
                 <h1>Block Diagram:</h1>
                 
                 <img src="images/communication.PNG">
