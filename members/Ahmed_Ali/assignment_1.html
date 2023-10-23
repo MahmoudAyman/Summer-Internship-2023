@@ -62,103 +62,90 @@
       <!-- ADD YOUR THE STEPS OF YOUR DOCUMENTATION BELOW -->
       <!-- TO ADD IMAGES YOU WILL FIND IMG TAGS BETWEEN PARAGRAPHS -->
       <!-- ADD THE NAME OF YOUR FILE -->
-      <h2>Overview</h2>
+      <h1>Overview</h1>
       <p>This documentation provides a simplified guide to building an AVR programmer with an ATtiny44A microcontroller.
         Follow the steps carefully and refer to the provided references for additional information and guidance.</p>
-      <img src="/images/avr/3dmodel.png">
-      <h2>Components and Tools</h2>
-      </ul>
-      <li>ATtiny44A SMD microcontroller</li>
-      <li>6-pin ISP header or 2x3 Pin Header SMD</li>
-      <li>20 MHz Resonator</li>
-      <li>330-ohm Resistor</li>
-      <li>LED (optional for status indication)</li>
-      <li>PCB board</li>
-      <li>Programmer (USBASP or Arduino as ISP)</li>
+        
+      <img src="images/avr/3dmodel.png">
+    
+
+      <h1>Components and Tools</h1>
+      <ul>
+        <li>ATtiny44A SMD microcontroller</li>
+        <li>6-pin ISP header or Pin Header</li>
+        <li>Resonator 16 MHz</li>
+        <li>Resistor (330 ohms)</li>
+        <li>Capacitor 1uF</li>
+        <li>Resistor 100 ohm x2</li>
+        <li>Resistor 1.5K ohm</li>
+        <li>Resistor 10K</li>
+        <li>Zener Diode 3.3 V x2</li>
       </ul>
 
-      <h2>Design Steps</h2>
-
+      <h1>Design Steps</h1>
       <h3>Step 1: PCB Design</h3>
-      <ol>
-        <li>I used KiCad to design my PCB.</li>
-        <li>Initially, I designed a USB connector package to minimize size. However, since I couldn't find a
-          through-hole (THT) ATtiny84/44, I switched to using an SMD ATtiny44A and kept other components as THT.</li>
-        <li>I tried to make my design single-layer , but due to spaces for a vertical 1x6 THT ISP header, I
-          switched to a 2x3 SMD pin header to make it single single-layer</li>
-      </ol>
-      <img src="/images/avr/Schematic.png">
-      <img src="/images/avr/layout.png">
+      <p>I used KiCad to design my PCB with a trace width of 0.6 and a clearance of 0.4.</p>
+      <img src="images/avr/Schematic.png">
+      <img src="images/avr/layout.png">
       <h3>Step 2: PCB Fabrication</h3>
+      <p>I used FlatCAM and an SRM20 machine to fabricate my PCB.</p>
+      <img src="images/avr/">
+      <h1>Firmware Compilation (Linux)</h1>
       <ol>
-        <li>I used FlatCAM and an SRM20 machine to fabricate my PCB. With min trace 0.6 and min clearness 0.4</li>
+        <li>Install the necessary tools by running the following command in the terminal:
+
+          <pre><code>sudo apt-get install gcc-avr avr-libc avrdude flex byacc bison gcc libusb-dev</code></pre>
+        </li>
+
+        <li>Download the firmware and unzip it using these commands:
+          <pre><code>wget http://academy.cba.mit.edu/classes/embedded_programming/firmware.zip && unzip firmware.zip</code></pre>
+        </li>
+
+        <li>Open the Makefile and edit the following parameters:
+          <ul>
+            <li><strong>DEVICE</strong> (microcontroller)</li>
+            <li><strong>AVRDUDE</strong> (programmer)</li>
+            <li><strong>F_CPU</strong> (crystal speed)</li>
+          </ul>
+          <img src="images/avr/makefile.png">
+        </li>
+        <li>Compile the firmware.</li>
+        <img src="images/avr/make.png">
       </ol>
+
+     
+
+      <h1>Trial and Errors</h1>
+      <ol>
+        <li>I designed a PCB with a USB-connector package. The goal was to design a small layout. But I couldn't find
+          through-hole (THT) ATtiny84/44 components. I chose to keep all other components as (THT) while switching the
+          ATtiny44 to (SMD). </li>
+
+          
+        <li>I tried to make the PCB single-layer with a 1x6 THT ISP header but it was challenging with a small layout .
+          I decided to switch to a 2x3 pin header in SMD form. This adjustment allowed for a more manageable
+          design.
+          <a>Note: This is a quick solution but not correct. You must create a custom pin header package (THT)
+            because,
+            at the end, I didnt find a pin header (SMD) and I put holes in the footprint.(^_^)</a>
+        </li>
+
+        <li>During the fabrication step, I found a problem with the custom USB package.
+
+          that was triggered by the modifications made during the first trial. When attempting to mirror the PCB for
+          fabrication (vcc&gnd). I edited the custom package again to be suitable for this case, or you can replace it
+          with a USB socket. </li>
+
+      </ol>
+
+      <h1>References</h1>
+      <ul>
+        <li><a href="https://fabacademy.org/2019/docs/FabAcademy-Tutorials/week04_electronic_production/fabisp.html">FabISP</a></li>
+        <li><a href="https://www.youtube.com/watch?v=J-MlgQMxIwM">Programming AVR with USBasp on Linux</a></li>
+        <li><a href="https://www.circuitsdiy.com/simplest-usb-avr-programmer/">Circuits DIY - Simplest USB AVR Programmer</a></li>
+      </ul>
+
       <img src="">
-      <h2>Firmware Compilation (Linux)</h2>
-
-      <h3>Step 1: Install Required Tools</h3>
-      <ol>
-        <h4>I installed the necessary tools on my Linux system:</h4>
-        <li><code>gcc-avr</code> for code compilation.</li>
-        <li><code>avr-libc</code>, the C library for AVR.</li>
-        <li><code>avrdude</code> for uploading HEX files to the microcontroller.</li>
-        <pre> sudo apt-get install gcc-avr avr-libc avrdude </pre>
-
-      </ol>
-
-      <h3>Step 2: Create a Makefile</h3>
-      <ol>
-        <li>I created a Makefile for my project. Here's an example:</li>
-      </ol>
-      <pre>
-  MCU=ATtiny44A
-  CC=avr-gcc
-  OBJCOPY=avr-objcopy
-  CFLAGS=-Wall -g -Os -mmcu=${MCU}
-  TARGET=main
-  SRCS=main.c
-  
-  all:
-      ${CC} ${CFLAGS} -o ${TARGET}.bin ${SRCS}
-      ${OBJCOPY} -j .text -j .data -O ihex ${TARGET}.bin ${TARGET}.hex
-  
-  flash:
-      avrdude -p ${MCU} -c usbasp -U flash:w:${TARGET}.hex:i -F -P usb
-  
-  clean:
-      rm -f *.bin *.hex
-      </pre>
-
-      <h3>Step 3: Compilation and Programming</h3>
-      <ol>
-        <li>I used the Makefile to compile my code and generate executable files.</li>
-        <li>I compiled the firmware by running <code>make</code>.</li>
-        <li>I flashed the firmware to the ATtiny44A using my programmer. Example command: <code>make flash</code>.</li>
-      </ol>
-
-      <h2>References</h2>
-      <ol>
-        <li><a href="https://www.youtube.com/watch?v=J-MlgQMxIwM">Video Tutorial</a></li>
-        <li><a href="https://www.circuitsdiy.com/simplest-usb-avr-programmer/">Circuits DIY - Simplest USB AVR
-            Programmer</a></li>
-        <li><a href="https://www.circuitsdiy.com/usb-avr-programmer-final-based-on-usbtinyisp/">Circuits DIY - USB AVR
-            Programmer Final</a></li>
-      </ol>
-
-      <h2>Trial and Errors</h2>
-      <ol>
-        <li><a> At the machining step, I realized that the USB custom package has a problem because when trying to
-            mirror the PCB
-            To fabricate it, the footprint pins are filped (VCC and ground). I will edit the custom package again, or I
-            will replace it with a USB socket.(ana astahel :|)  </a></li>
-        <!-- <li><a href="https://www.circuitsdiy.com/simplest-usb-avr-programmer/">Circuits DIY - Simplest USB AVR
-            Programmer</a></li>
-        <li><a href="https://www.circuitsdiy.com/usb-avr-programmer-final-based-on-usbtinyisp/">Circuits DIY - USB AVR
-            Programmer Final</a></li> -->
-      </ol>
-
-
-      <img src=""> 
 
 
     </section><!-- #end content area -->
