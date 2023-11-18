@@ -18,7 +18,23 @@
   <link rel="stylesheet" href="css/colorblocks-style.css">
   <script src="js/libs/modernizr-2.6.2.min.js"></script>
 </head>
-
+<style>
+        code {
+            background-color: #f8f8f8;
+            padding: 2px 5px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+        pre {
+            background-color: #f8f9f9;
+            padding: 20px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            white-space: pre-wrap;
+            font-family: 'Courier New', monospace;
+        }
+</style>
 
 <body id="home">
     <header class="wrapper clearfix">
@@ -60,7 +76,7 @@
     <!-- ADD YOUR THE STEPS OF YOUR DOCUMENTATION BELOW -->
     <!-- TO ADD IMAGES YOU WILL FIND IMG TAGS BETWEEN PARAGRAPHS -->
     <!-- ADD THE NAME OF YOUR FILE -->
-				<h1>stm32F303RE Configuration Steps:</h1>
+				<h1>stm32F411RE Configuration Steps:</h1>
 				<h2>Configuration of RCC (Clock Control Register):</h2>
 				<p><br>To start programming on the stm32F303RE microcontroller and with any ST microcontroller, everything needed must be enabled first through the RCC reg. <br>
 					this can be done by derefrencing the RCC using (->) and choosing the needed peripherals or buses and this can be achieved by using the archeticture of the controller.<br>
@@ -74,24 +90,24 @@
 					- Alternate function mode at bit value 10<br>
 					- Analog at bit value 11<br><br>
 					</p>
-					<img src="images/GPIO_MODER.PNG">
+					<img src="images/GPIO_MODER.png">
 					<p>After this according to your preference if the pin is configured as an output pin , we will use the port output type register(GPIOx_OTYPER). This register will determine whether the pin
 					uses: <br><br>
 					- Output Push/Pull at bit value 0<br>
 					- Output open-drain at bit value 1<br><br>
 					</p>
-					<img src="images/GPIO_OTYPER.PNG">
+					<img src="images/GPIO_OTYPER.png">
 					<p>Then we have to specify the speed of this output pin. To do that we will use the GPIO output speed register(GPIOx_OSPEEDR). It can be configured by:<br><br>
 					- Low speed at bit value x0 where x is 0 or 1 doesn't matter.<br>
 					- Medium speed at bit value 01<br>
 					- High speed at bit value 11<br><br>
 					</p>
-					<img src="images/GPIO_OSPEEDR.PNG">
+					<img src="images/GPIO_OSPEEDR.png">
 					<p>At the end we will specify if the pin is pull up or down assuming it's configured to do so from the port output type register:<br><br>
 					- No pull up,pull down at bit value 00<br>
 					- pull up at bit value 01<br>
 					- pull down at bit value 10</p>
-					<img src="images/GPIO_PUPDR.PNG">
+					<img src="images/GPIO_PUPDR.png">
 					<h2>UART Initialization:</h2>
 					<p>UART initialization starts with knowing which UART peripheral in the stm32 chip is going to be used.<br>
 					First, the ABPENR1 or ABPENR2 as deictated by the selected UART but each bus has runs on a different clock frequency where ABPENR1 runs on 72MHz and ABPENR2 runs on 32MHz.<br><br>
@@ -102,19 +118,51 @@
 					this register is divided into two register AFRL (low) and AFRH(high).
 					each pin is has 16 alternate function that is multiplexed into 4 bits. 
 					Since we are using PA2 and PA3, we will configure them in the AFRL register. To select them as Tx and Rx, the AFRL is set to AF7 value which is 0111 in binary in bits 8,9,10,11 and 12,13,14,15.<br><br></p>
-					<img src="images/AFRL.PNG">
+					<img src="images/AFRL.png">
 					<h2>Baudrate Selection:</h2>
 					<p>The UART protocol is asynchronous and doesn't use a clock to receive and send the data so it relays on the baudrate. to select the baudrate we first need to know about the oversampling concept.<br>
 					<br><br>The receiver must sample the incoming data stream at a rate that is higher than the bit rate to determine when each bit starts and ends 1. Oversampling is used to increase the sampling rate and improve the accuracy of the sampling process.Usually, the oversampling is set to be 16 using the OVER8 and setting it to 0 in the UART Control Register 1(USART_CR1).<br>
 					to select the baudrate we desire ,9600 in this project, we divide the Fck value of the ABPENR selected bus which is the ABPENR2 on the baudrate desired (9600) and then putting the result as a value of hexadecimal in the USART_BRR register(Baud Rate Register).In this project the value is 0xEA6.<br><br></p>
 					<img src="images/Baudrate_generation.PNG">
-					<img src="images/BRR.PNG">
+					<img src="images/BRR.png">
 					<p>Now, we can enable the pins to send or receive data by setting the bits UE(UART Enable), TE (Transmit Enable),RE(Receive Enable)in the USART_CR1 and then, we can start using the UART just without interrupts yet.<br><br></p>
-					<img src="images/UART_CR1.PNG">
-					<p>Notice: The BRR value should be set before setting the UART Enable bit (UE) in the USART_CR1.</p>
+					<img src="images/UART_CR1.png">
+					<p>Notice: The BRR value should be set before setting the UART Enable bit (UE) in the USART_CR1.<br><br> 
+					This function shows how to initialize the UART6:<br>
+					
+<pre>UART_INIT(void){
+
+RCC->APB2ENR |= RCC_APB2ENR_USART6EN;                //USART2 TX=PA2 ,RX=PA3 <br>
+RCC->AHB1ENR |= RCC_AHB1ENR_GPIOCEN;                 //Enable port A in the RCC reg<br><br>
+
+// configuring PA2 and PA3 to AF pinmode
+GPIOC->MODER |= GPIO_MODER_MODER6_1 ;
+GPIOC->MODER &=~ GPIO_MODER_MODER6_0;
+GPIOC->MODER |= GPIO_MODER_MODER7_1 ;
+GPIOC->MODER &=~ GPIO_MODER_MODER7_0;
+
+GPIOC->OTYPER &=~ GPIO_OTYPER_OT_6;       //PA2 set to push_pull No_PULL by default
+GPIOC->OTYPER &=~ GPIO_OTYPER_OT_7;       //PA3 set to push_pull No_PULL by default
+
+//set speed of PA2,PA3 to high speed
+GPIOC->OSPEEDR |= GPIO_OSPEEDER_OSPEEDR6 | GPIO_OSPEEDER_OSPEEDR7 ;
+
+GPIOC->AFR[0] &=~ (1<<24) | (1<<25) | (1<<26) | (1<<28) | (1<<29) | (1<<30); //PA2 , PA3 alternate function AF7 USART2 <br>
+GPIOC->AFR[0] |=(1<<27) | (1<<31);
+
+
+
+// set baud rate before setting bit UE(UART Enable) to 1 and start sending or receiving<br>
+// oversampling form bit OVER8 = 0 is 16 by default
+USART6->BRR= 0x28B0; // for APB1 36MHz at baud rate 9600
+
+//----------|  UART Enable  |Receive Enable|Transmit Enable
+USART6->CR1 |= USART_CR1_UE | USART_CR1_RE | USART_CR1_TE;
+}
+						</pre></p>
                 <h1>Block Diagram:</h1>
                 
-                <img src="images/communication.PNG">
+                <img src="images/communication.png">
                                
                 <h1>Circuit Design:</h1>
 				<p>to be updated</p>
