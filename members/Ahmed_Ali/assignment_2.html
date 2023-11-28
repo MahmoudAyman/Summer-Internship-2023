@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js"> <!--<![endif]-->
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <!-- CHANGE YOUR NAME -->
+  <title>Ahmed Ali Profile </title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+  <link href='http://fonts.googleapis.com/css?family=Droid+Serif|Ubuntu' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="js/flexslider/flexslider.css">
+  <link rel="stylesheet" href="css/colorblocks-style.css">
+  <script src="js/libs/modernizr-2.6.2.min.js"></script>
+</head>
+
+
+<body id="home">
+  <header class="wrapper clearfix">
+
+    <div id="banner">
+      <div id="logo"><a href=""><img src="images/logo.png" alt="logo" height="30%" width="30%"></a></div>
+    </div>
+
+    <nav id="topnav" role="navigation">
+      <div class="menu-toggle">Menu</div>
+      <ul class="srt-menu" id="menu-main-navigation" style="padding-bottom: 10px;">
+        <li class="current"><a href="index.html">Home</a></li>
+        <li>
+          <a href="assignment_1.html">Assignments</a>
+          <ul>
+            <li><a href="assignment_1.html">AVR Progmmer</a></li>
+            <li><a href="assignment_2.html">SPI Communication Protocol</a></li>
+            <!-- <li><a href="assignment_1.html">Assignment</a></li>
+            <li><a href="assignment_1.html">Assignment</a></li>
+            <li><a href="assignment_1.html">Assignment</a></li> -->
+          </ul>
+        </li>
+        <li><a href="final.html">Final Project</a></li>
+      </ul>
+    </nav>
+
+  </header><!-- end header -->
+
+  <section id="page-header" class="clearfix">
+
+    <div class="wrapper">
+      <h1>How to Work with SPI in AVR Microcontrollers</h1>
+    </div>
+  </section>
+
+  <div id="main" class="wrapper clearfix">
+
+    <section id="content">
+      <!-- ADD YOUR THE STEPS OF YOUR DOCUMENTATION BELOW -->
+      <!-- TO ADD IMAGES YOU WILL FIND IMG TAGS BETWEEN PARAGRAPHS -->
+      <!-- ADD THE NAME OF YOUR FILE -->
+      <h1>Overview</h1>
+
+      <p>The primary aim of this documentation is to enable users to develop a slave node that can be controlled by any
+        master node through SPI (Serial Peripheral Interface) communication. This documentation provides a comprehensive
+        guide for configuring a microcontroller as a slave device, allowing external master devices to send commands and
+        manage its functionalities via the SPI protocol.</p>
+
+      <img src="images/spi/avr-spi.png">
+
+      <h2>SPI Overview</h2>
+
+      <p><strong>Key Features:</strong></p>
+      <ul>
+        <li><strong>Synchronous Communication.</strong> </li>
+        <li><strong>Master-Slave Architecture.</strong> </li>
+        <li><strong>Four Wire Interface:</strong> SPI utilizes four main signals for communication:</li>
+        <ul>
+          <li>MOSI (Master Out Slave In)</li>
+          <li>MISO (Master In Slave Out)</li>
+          <li>SCK (Serial Clock)</li>
+          <li>SS (Slave Select)</li>
+
+          <img src="images/spi/MS.png">
+        </ul>
+      </ul>
+
+      <h2>Hardware Requirements</h2>
+      <ul>
+        <li>AVR programmer</li>
+        <li>2 AVR microcontrollers</li>
+        <li>LCD display</li>
+        <li>Wires</li>
+        <li>Resistors</li>
+        <li>LEDs</li>
+        <li>Dip switch or push-button switch</li>
+      </ul>
+
+      <h2>Software Setup</h2>
+      <ul>
+        <li>Eclipse, CodeBlocks, or any compatible IDE </li>
+        <li>AVR library for development</li>
+        <li>Proteus simulator (if using simulation)</li>
+      </ul>
+
+      <h2>SPI Configuration in AVR</h2>
+
+      <p><strong>SPCR: SPI Control Register</strong></p>
+      <img src="images/spi/r1.png">
+      <ul>
+        <li>Bit 7 – SPIE: SPI Interrupt Enable bit</li>
+        <li>Bit 6 – SPE: SPI Enable bit</li>
+        <li>Bit 5 – DORD: Data Order bit</li>
+        <li>Bit 4 – MSTR: Master/Slave Select bit</li>
+        <li>Bit 3 – CPOL: Clock Polarity Select bit</li>
+        <li>Bit 2 – CPHA: Clock Phase Select bit</li>
+        <li>Bit 1:0 – SPR1: SPR0 SPI Clock Rate Select bits</li>
+      </ul>
+
+      <p><strong>SPSR: SPI Status Register</strong></p>
+      <img src="images/spi/r2.png">
+      <ul>
+        <li>Bit 7 – SPIF: SPI interrupt flag bit</li>
+        <li>Bit 6 – WCOL: Write Collision Flag bit</li>
+        <li>Bit 5:1 – Reserved Bits</li>
+        <li>Bit 0 – SPI2X: Double SPI Speed bit</li>
+      </ul>
+
+      <p><strong>SPDR: SPI Data Register</strong></p>
+      <img src="images/spi/r3.png">
+      <ul>
+        <li>SPI Data register used to transfer data between the Register file and SPI Shift Register.</li>
+        <li>Writing to the SPDR initiates data transmission.</li>
+      </ul>
+      <title>Link to SPI Configuration</title>
+      <style>
+        .aqua-link {
+          color: rgb(4, 118, 176);
+          text-decoration: none;
+        }
+
+        .aqua-link:hover {
+          text-decoration: underline;
+        }
+      </style>
+      </head>
+
+      <body>
+
+        <!-- Hyperlink with specific word -->
+        <p>To access the SPI configuration source code, click <a
+            href="https://github.com/ahmeedali/AVR-Projects/tree/main/SPI_AVR/Slave/MCAL/SPI"
+            class="aqua-link">here</a>.</p>
+
+
+
+        <h1>Interfacing with Peripherals - SPI Communication</h1>
+
+        <img src="images/spi/interface.png">
+        <h2>Master-Slave Communication Protocol</h2>
+
+        <p>The master device communicates with the slave device by sending specific letters:</p>
+
+        <ul>
+          <li><strong>For Master (sends to Slave):</strong></li>
+          <ul>
+            <li><strong>n</strong>: Turn on LED</li>
+            <li><strong>f</strong>: Turn off LED</li>
+            <li><strong>s</strong>: Request status of the switch (pressed or released)</li>
+          </ul>
+          <li><strong>For Slave (sends to Master):</strong></li>
+          <ul>
+            <li><strong>p</strong>: Indicates the switch is pressed</li>
+            <li><strong>r</strong>: Indicates the switch is released</li>
+          </ul>
+        </ul>
+        <p>source code, click <a href="https://github.com/ahmeedali/AVR-Projects/tree/main/SPI_AVR/Slave"
+            class="aqua-link">here</a>.</p>
+
+        <ul>
+          <li><strong>to be compeleted</strong></li>
+          </ul>
+          <img src="">
+
+
+    </section><!-- #end content area -->
+
+
+    <!-- sidebar -->
+    <aside>
+      <h2>See also: </h2>
+      <nav id="secondary-navigation">
+        <ul>
+
+          <li><a href="assignment_1.html">AVR Programmer</a></li>
+          <!-- <li><a href="assignment_1.html">Assignment</a></li>
+          <li><a href="assignment_1.html">Assignment</a></li>
+          <li><a href="assignment_1.html">Assignment</a></li>
+          <li><a href="assignment_1.html">Assignment</a></li> -->
+
+        </ul>
+      </nav>
+    </aside><!-- #end sidebar -->
+
+
+
+  </div><!-- #end div #main .wrapper -->
+
+
+
+
+
+  <!-- footer area -->
+  <footer>
+    <div id="colophon" class="wrapper clearfix">
+      <h2 style="padding-left: 30px;">PROUDLY MADE BY MAKERS</h2>
+      <img src="images/logo.png" height="30%" width="30%">
+    </div>
+
+  </footer><!-- #end footer area -->
+
+
+  <!-- jQuery -->
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+  <script>window.jQuery || document.write('<script src="js/libs/jquery-1.9.0.min.js">\x3C/script>')</script>
+
+  <script defer src="js/flexslider/jquery.flexslider-min.js"></script>
+
+  <!-- fire ups - read this file!  -->
+  <script src="js/main.js"></script>
+
+</body>
+
+</html>
